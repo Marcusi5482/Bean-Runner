@@ -2,7 +2,6 @@ import kaplay from "https://unpkg.com/kaplay@3001.0.19/dist/kaplay.mjs";
 
 kaplay({
     background: [62, 175, 250],
-    setFullscreen: true,
     orientation: "landscape",
 });
 
