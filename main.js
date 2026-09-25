@@ -11,8 +11,6 @@ loadSound("burp", "/sounds/burp.mp3");
 
 setGravity(675);
 
-setFullscreen(true);
-
 scene("game", () => {
     let i = 0;
     let score = 0;
