@@ -1,7 +1,9 @@
 import kaplay from "https://unpkg.com/kaplay@3001.0.19/dist/kaplay.mjs";
 
 kaplay({
-    background: [62, 175, 250]
+    background: [62, 175, 250],
+    setFullscreen: true,
+    orientation: "landscape",
 });
 
 loadSprite("bean", "/sprites/bean.png");
@@ -11,10 +13,14 @@ loadSound("burp", "/sounds/burp.mp3");
 
 setGravity(675);
 
+setFullscreen(true);
+
 scene("game", () => {
     let i = 0;
     let score = 0;
-    let speed_ghost = 0;
+    let speed_ghost = 1.0;
+    let center_x_gh = center().x * 2.5;
+    let center_y_gh = center().y - 8;
 
     const player = add([
         sprite("bean"),
@@ -107,27 +113,30 @@ scene("game", () => {
         score++;
         //score_text.text = "Score: " + score;
 
-        if(i >= 300)
-            speed_ghost++;
+        if(i >= 100)
+            speed_ghost = speed_ghost + 0.01;
+            //speed_ghost++;
 
-        if(i >= rand(250 - (speed_ghost / 10), 1000)) {
+        if(i >= rand(250 - (speed_ghost * 10), 1000)) {
             if(rand(1, 10) == 1){
                 add([
                     sprite("heart"),
-                    pos(center().x * 2.5, center().y - 8),
+                    pos(center_x_gh, center_y_gh),
                     area(),
                     anchor("bot"),
                     offscreen(),
                     "health",
+                    "moveleft",
                 ]);
             } else {
                 add([
                     sprite("ghost"),
-                    pos(center().x * 2.5, center().y - 8),
+                    pos(center_x_gh, center_y_gh),
                     area(),
                     anchor("bot"),
                     offscreen(),
                     "enemy",
+                    "moveleft",
                 ]);
             }
             
@@ -137,18 +146,10 @@ scene("game", () => {
         
     });
 
-    onUpdate("enemy", (enemy) => {
-        enemy.move(-100 - speed_ghost, 0);
-        // Сробативает если враг зашел в поле видемости
-        if (!enemy.isOffScreen()) {
-            enemy.offscreen = {destroy: true};
-        }
-    });
-
-    onUpdate("health", (health) => {
-        health.move(-100 - speed_ghost, 0);
-        if (!health.isOffScreen()) {
-            health.offscreen = {destroy: true};
+    onUpdate("moveleft", (objects) => {
+        objects.move(-100 * speed_ghost, 0);
+        if (!objects.isOffScreen() && objects.offscreen != {destroy: true}) {
+            objects.offscreen = {destroy: true};
         }
     });
 
