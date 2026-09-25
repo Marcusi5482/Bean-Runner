@@ -4,6 +4,8 @@ kaplay({
     background: [62, 175, 250],
 });
 
+loadRoot(".");
+
 loadSprite("bean", "/sprites/bean.png");
 loadSprite("ghost", "/sprites/ghosty.png");
 loadSprite("heart", "/sprites/heart.png");
